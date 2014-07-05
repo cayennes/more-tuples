@@ -13,7 +13,15 @@
     :builds [{:id "dev"
               :source-paths ["src"]
               :compiler {
-                :output-to "more_tuples.js"
+                :output-to "dev.js"
                 :output-dir "out"
                 :optimizations :none
-                :source-map true}}]})
+                :source-map true}}
+             {:id "release"
+              :source-paths ["src"]
+              :compiler {
+                :output-to "more_tuples.js"
+                :optomizations :advanced
+                :pretty-print false
+                :preamble ["react/react.min.js"]
+                :externs ["react/externs/react.js"]}}]})

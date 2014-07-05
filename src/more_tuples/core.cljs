@@ -249,4 +249,4 @@
 (om/root
   game-view
   game-state
-  {:target (. js/document (getElementById "app"))})
+  {:target (. js/document (getElementById "game"))})
