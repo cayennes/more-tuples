@@ -9,7 +9,8 @@
 
 ; defaults
 
-(def colors ["blue" "indigo" "green"])
+; colors from http://tristen.ca/hcl-picker
+(def colors ["#45F2A8" "#1AA5C4" "#725279"])
 
 ; parts of drawing things
 
