@@ -56,7 +56,10 @@
                                                        border-color)})]
     (apply dom/svg
            #js {:width (* 2 radius) :height (* 2 radius)
+                ; TODO: having both of these makes it work on my desktop and
+                ; iPhone, but probably breaks on some other platforms
                 :onClick on-click
+                :onTouchEnd on-click
                 :style #js {:margin margin}}
            (if values
              (mapv #(disk-slice (merge segment-params
