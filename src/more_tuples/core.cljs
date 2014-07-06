@@ -45,7 +45,8 @@
          selected-color "black"
          segment {}
          radius 75
-         margin 5}}]
+         margin 5
+         on-click nil}}]
   (let [n (count values)
         portion (/ 1 n)
         segment-params (merge segment {:radius radius
@@ -176,10 +177,13 @@
     om/IWillMount
     (will-mount
      [_]
+     ; TODO: is there any way to make go blocks idempotent?  this doesn't play
+     ; well with live reloading, and cleaning up in IWillUnmount doesn't work
+     ; because somehow that isn't always called
      (go (loop [] (<! (timeout 1000)) (om/transact! t :t dec) (recur))))
 
     om/IRender
-    (render [_] (dom/div nil (str "remaining time: " (:t t))))))
+    (render [_] (dom/div nil (str "remaining seconds: " (:t t))))))
 
 ; board
 
@@ -239,15 +243,42 @@
                        (om/build time-view (:time data))
                        (om/build board-view (:board data)))
               (dom/div nil
-                       (dom/p nil "game over")
+                       (dom/h2 nil "Game over")
                        (dom/p nil (str "score: " (:score data)))
                        (dom/p nil "(reload to play again)"))))))
 
-(def game-state (atom {:board (new-board {:size 2})
-                       :score 0
-                       :time {:t 120}}))
+(def app-state (atom {:game {:board (new-board {:size 2})
+                             :score 0
+                             :time {:t 120}}}))
+
+
+(defn explanation-view [_ _]
+  (om/component (dom/div nil
+                         (dom/h2 nil "How to play")
+                         (dom/p nil "The object of the game is to find sets of three disks meeting the match criteria fast enough that the timer doesn't run out.")
+                         (dom/p nil "Three disks match if for each segment the colors are either all the same or all different - independant of other segments.")
+                         (dom/p nil "These triples match, since the left and right segments are the same between all three disks and the bottom segment has three different colors:")
+                         (dom/div nil
+                                  (draw-disk {:values [1 0 2] :radius 50})
+                                  (draw-disk {:values [1 1 2] :radius 50})
+                                  (draw-disk {:values [1 2 2] :radius 50}))
+                         (dom/p nil "These doubles do not, since the left segment has two blues and one green:")
+                         (dom/div nil
+                                  (draw-disk {:values [1 0] :radius 50})
+                                  (draw-disk {:values [2 1] :radius 50})
+                                  (draw-disk {:values [0 1] :radius 50}))
+                         (dom/p nil "When you find a match, time gets added to the timer (more the less time you have left) and when you select three disks that do not match, time gets removed (less the less time you have left).  But even though the timer is what will make you lose, this is not a speedy game - every time you find a match you have at least a full minute to find the next one.")
+                         (dom/p nil "Every sixteen matches you find, the number of segments in the disks will increase by one.")
+                         (dom/p nil "Since I haven't implemented proper game startng yet, if you just read all these instructions you might want to reload the page now to restart the timer before you start playing."))))
+
+
+(defn app-view [data _]
+  (om/component
+   (dom/div nil
+            (om/build game-view (:game data))
+            (om/build explanation-view (:tutorial data)))))
 
 (om/root
-  game-view
-  game-state
-  {:target (. js/document (getElementById "game"))})
+  app-view
+  app-state
+  {:target (. js/document (getElementById "app"))})
