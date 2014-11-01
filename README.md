@@ -1,3 +1,5 @@
+[![Circle CI] (https://circleci.com/gh/cayennes/more-tuples.svg?style=badge)](https://circleci.com/gh/cayennes/more-tuples)
+
 # More Tuples
 
 A simple game inspired by set, but with more-tuples instead of 4-tuples.  Written in ClojureScript and [om](https://github.com/swannodette/om).  Play it [here](https://cayennes.github.io/more-tuples).
