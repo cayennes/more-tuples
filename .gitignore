@@ -9,3 +9,4 @@ pom.xml
 .lein-plugins/
 .nrepl-port
 dev.js
+dev-resources/public/js/compiled/

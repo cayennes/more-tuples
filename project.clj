@@ -3,10 +3,12 @@
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.clojure/clojurescript "0.0-2202"]
                  [org.clojure/core.async "0.1.267.0-0d7780-alpha"]
-                 [om "0.6.3"]]
+                 [om "0.6.3"]
+                 [devcards "0.1.2-SNAPSHOT"]]
 
   :plugins [[lein-cljsbuild "1.0.3"]
-            [com.cemerick/clojurescript.test "0.3.1"]]
+            [com.cemerick/clojurescript.test "0.3.1"]
+            [lein-figwheel "0.1.5-SNAPSHOT"]]
 
   :cljsbuild {
     :test-commands {"unit" ["phantomjs" :runner
@@ -32,4 +34,9 @@
                          :optomizations :simple
                          :hashbang false
                          :preamble ["react/react.min.js"]
-                         :externs ["react/externs/react.js"]}}]})
+                         :externs ["react/externs/react.js"]}}
+             {:id "devcards"
+              :source-paths ["src" "src-devcards"]
+              :compiler {:output-to "dev-resources/public/js/compiled/devcards.js"
+                         :output-dir "dev-resources/public/js/compiled/out"
+                         :optimizations :none}}]})
