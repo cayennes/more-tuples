@@ -4,6 +4,7 @@
    [more-tuples.core :as mt]
    [more-tuples-devcards.cards :as cards]
    [more-tuples-devcards.scratch]; TODO: instructions suggest this isn't necessary
+   [more-tuples-devcards.timer]
    [om.core :as om :include-macros true]
    [om.dom :as dom :include-macros true])
   (:require-macros
@@ -198,19 +199,6 @@
     :analyzers [set-exists-view]
     :data {:disks (vec (repeat 9 {}))
            :size 3}}))
-
-; time bar
-
-(defcard time-view-card
-  (cards/om-manipulation-card
-   {:view (fn [data owner] (om/component (om/build mt/time-view (:time data))))
-    :manipulators [(cards/make-fn-button {:title "more"
-                                          :f #(assoc % :time
-                                                (mt/add-time (:time %)))})
-                   (cards/make-fn-button {:title "less"
-                                          :f #(assoc % :time
-                                                (mt/remove-time (:time %)))})]
-    :data {:time 120}}))
 
 ; responsive board
 
