@@ -163,7 +163,6 @@
 
 (defn add-time
   [{t :t :as data}]
-  (print "adding time")
   (let [max-total-time (/ max-time-added fraction-jump)
         lost-time (- max-total-time t)
         to-gain (* lost-time fraction-jump)]
@@ -171,7 +170,6 @@
 
 (defn remove-time
   [{t :t :as data}]
-  (print "removing time")
   (assoc data :t (Math/ceil (- t (* t fraction-jump)))))
 
 (defn time-view
@@ -180,13 +178,30 @@
     om/IWillMount
     (will-mount
      [_]
-     ; TODO: is there any way to make go blocks idempotent?  this doesn't play
-     ; well with live reloading, and cleaning up in IWillUnmount doesn't work
-     ; because somehow that isn't always called
-     (go (loop [] (<! (timeout 1000)) (om/transact! t :t dec) (recur))))
+     ; instance is a hack to make this work with live reloading.
+     ; cleaning up in IWillUnmount didn't work because somehow it wasn't always
+     ; called.
+     (let [instance (inc (:instance t))]
+       (om/update! t :instance instance)
+       (go (loop [] (<! (timeout 1000))
+             (when (= instance (:instance @t))
+               (if-not (:pause @t)
+                 (om/transact! t :t dec))
+               (recur))))))
 
     om/IRender
     (render [_] (dom/div nil (str "remaining seconds: " (:t t))))))
+
+(defn pause-button
+  [t owner]
+  (reify
+    om/IRender
+    (render [_]
+      (dom/button #js {:onClick (fn [_] (om/transact! t
+                                                      #(update-in % [:pause] not)))}
+                  (if (:pause t)
+                    "resume"
+                    "pause")))))
 
 ; board
 
@@ -244,7 +259,9 @@
               (dom/div nil
                        (dom/div nil (str "score: " (:score data)))
                        (om/build time-view (:time data))
-                       (om/build board-view (:board data)))
+                       (if-not (-> data :time :pause)
+                         (om/build board-view (:board data)))
+                       (om/build pause-button (:time data)))
               (dom/div nil
                        (dom/h2 nil "Game over")
                        (dom/p nil (str "score: " (:score data)))

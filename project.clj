@@ -3,25 +3,40 @@
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.clojure/clojurescript "0.0-2202"]
                  [org.clojure/core.async "0.1.267.0-0d7780-alpha"]
-                 [om "0.6.3"]]
+                 [om "0.6.3"]
+                 [devcards "0.1.2-SNAPSHOT"]]
 
-  :plugins [[lein-cljsbuild "1.0.3"]]
-
-  :source-paths ["src"]
+  :plugins [[lein-cljsbuild "1.0.3"]
+            [com.cemerick/clojurescript.test "0.3.1"]
+            [lein-figwheel "0.1.5-SNAPSHOT"]]
 
   :cljsbuild {
+    :test-commands {"unit" ["phantomjs" :runner
+                            "window.literal_js_was_evaluated=true"
+                            "test/more_tuples/polyfill.js"
+                            "testable.js"]}
     :builds [{:id "dev"
               :source-paths ["src"]
-              :compiler {
-                :output-to "dev.js"
-                :output-dir "out"
-                :optimizations :none
-                :source-map true}}
+              :compiler {:output-to "dev.js"
+                         :output-dir "out"
+                         :optimizations :none
+                         :source-map true}}
              {:id "release"
               :source-paths ["src"]
-              :compiler {
-                :output-to "more_tuples.js"
-                :optomizations :advanced
-                :pretty-print false
-                :preamble ["react/react.min.js"]
-                :externs ["react/externs/react.js"]}}]})
+              :compiler {:output-to "more_tuples.js"
+                         :optomizations :advanced
+                         :pretty-print false
+                         :preamble ["react/react.min.js"]
+                         :externs ["react/externs/react.js"]}}
+             {:id "test"
+              :source-paths ["src" "test"]
+              :compiler {:output-to "testable.js"
+                         :optomizations :simple
+                         :hashbang false
+                         :preamble ["react/react.min.js"]
+                         :externs ["react/externs/react.js"]}}
+             {:id "devcards"
+              :source-paths ["src" "src-devcards"]
+              :compiler {:output-to "dev-resources/public/js/compiled/devcards.js"
+                         :output-dir "dev-resources/public/js/compiled/out"
+                         :optimizations :none}}]})
