@@ -185,7 +185,8 @@
        (om/update! t :instance instance)
        (go (loop [] (<! (timeout 1000))
              (when (= instance (:instance @t))
-               (om/transact! t :t dec)
+               (if-not (:pause @t)
+                 (om/transact! t :t dec))
                (recur))))))
 
     om/IRender

@@ -10,9 +10,9 @@
   (cards/om-manipulation-card
    {:view (fn [data owner] (om/component (om/build mt/time-view (:time data))))
     :manipulators [(cards/make-fn-button {:title "more"
-                                          :f #(assoc % :time
-                                                (mt/add-time (:time %)))})
+                                          :f #(update-in % [:time] mt/add-time)})
                    (cards/make-fn-button {:title "less"
-                                          :f #(assoc % :time
-                                                (mt/remove-time (:time %)))})]
+                                          :f #(update-in % [:time] mt/remove-time)})
+                   (cards/make-fn-button {:title "pause"
+                                          :f #(update-in % [:time :pause] not)})]
     :data {:time {:t 120}}}))
