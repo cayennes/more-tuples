@@ -192,6 +192,17 @@
     om/IRender
     (render [_] (dom/div nil (str "remaining seconds: " (:t t))))))
 
+(defn pause-button
+  [t owner]
+  (reify
+    om/IRender
+    (render [_]
+      (dom/button #js {:onClick (fn [_] (om/transact! t
+                                                      #(update-in % [:pause] not)))}
+                  (if (:pause t)
+                    "resume"
+                    "pause")))))
+
 ; board
 
 (defn replace-selected
@@ -248,7 +259,9 @@
               (dom/div nil
                        (dom/div nil (str "score: " (:score data)))
                        (om/build time-view (:time data))
-                       (om/build board-view (:board data)))
+                       (if-not (-> data :time :pause)
+                         (om/build board-view (:board data)))
+                       (om/build pause-button (:time data)))
               (dom/div nil
                        (dom/h2 nil "Game over")
                        (dom/p nil (str "score: " (:score data)))

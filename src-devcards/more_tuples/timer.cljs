@@ -8,11 +8,8 @@
 
 (defcard time-view-card
   (cards/om-manipulation-card
-   {:view (fn [data owner] (om/component (om/build mt/time-view (:time data))))
-    :manipulators [(cards/make-fn-button {:title "more"
-                                          :f #(update-in % [:time] mt/add-time)})
-                   (cards/make-fn-button {:title "less"
-                                          :f #(update-in % [:time] mt/remove-time)})
-                   (cards/make-fn-button {:title "pause"
-                                          :f #(update-in % [:time :pause] not)})]
-    :data {:time {:t 120}}}))
+   {:view (fn [data owner] (om/component (om/build mt/time-view data)))
+    :manipulators [(cards/make-fn-button {:title "more" :f mt/add-time})
+                   (cards/make-fn-button {:title "less" :f mt/remove-time})
+                   mt/pause-button]
+    :data {:t 120}}))
