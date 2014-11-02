@@ -8,5 +8,5 @@ pom.xml
 .lein-repl-history
 .lein-plugins/
 .nrepl-port
-dev.js
+*.js
 dev-resources/public/js/compiled/
