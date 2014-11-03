@@ -10,6 +10,9 @@
             [com.cemerick/clojurescript.test "0.3.1"]
             [lein-figwheel "0.1.5-SNAPSHOT"]]
 
+  ; so that clojurescript compilation doesn't die when run in circle
+  :jvm-opts ["-Xmx2g"]
+
   :cljsbuild {
     :test-commands {"unit" ["phantomjs" :runner
                             "window.literal_js_was_evaluated=true"
