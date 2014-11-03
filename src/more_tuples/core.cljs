@@ -289,7 +289,7 @@
                                   (draw-disk {:values [0 1] :radius 50}))
                          (dom/p nil "When you find a match, time gets added to the timer (more the less time you have left) and when you select three disks that do not match, time gets removed (less the less time you have left).  But even though the timer is what will make you lose, this is not a speedy game - every time you find a match you have at least a full minute to find the next one.")
                          (dom/p nil "Every sixteen matches you find, the number of segments in the disks will increase by one.")
-                         (dom/p nil "Since I haven't implemented proper game startng yet, if you just read all these instructions you might want to reload the page now to restart the timer before you start playing."))))
+                         (dom/p nil "Since I haven't implemented proper game starting yet, if you just read all these instructions you might want to reload the page now to restart the timer before you start playing."))))
 
 
 (defn app-view [data _]
