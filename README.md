@@ -1,4 +1,4 @@
-[![Circle CI] (https://circleci.com/gh/cayennes/more-tuples.svg?style=badge)](https://circleci.com/gh/cayennes/more-tuples)
+[![Circle CI] (https://circleci.com/gh/cayennes/more-tuples.svg?style=svg)](https://circleci.com/gh/cayennes/more-tuples)
 
 # More Tuples
 
