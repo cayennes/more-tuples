@@ -14,9 +14,7 @@
   :jvm-opts ["-Xmx2g"]
 
   :cljsbuild {
-    :test-commands {"unit" ["phantomjs" :runner
-                            "window.literal_js_was_evaluated=true"
-                            "test/more_tuples/polyfill.js"
+    :test-commands {"unit" ["node" :node-runner
                             "testable.js"]}
     :builds [{:id "dev"
               :source-paths ["src"]
@@ -27,14 +25,15 @@
              {:id "release"
               :source-paths ["src"]
               :compiler {:output-to "more_tuples.js"
-                         :optomizations :advanced
+                         :optimizations :advanced
                          :pretty-print false
                          :preamble ["react/react.min.js"]
                          :externs ["react/externs/react.js"]}}
              {:id "test"
               :source-paths ["src" "test"]
-              :compiler {:output-to "testable.js"
-                         :optomizations :simple
+              :compiler {:target :nodejs
+                         :output-to "testable.js"
+                         :optimizations :advanced
                          :hashbang false
                          :preamble ["react/react.min.js"]
                          :externs ["react/externs/react.js"]}}
